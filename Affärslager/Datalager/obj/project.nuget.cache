@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "dgSpecHash": "m0RtrIt7Gaz+dIvDebCeECJCoJzVQM1dSlpnpqJv3hNAu8pUP6xrxsF9C48+EzUcD4IBGbZhehcwtEK/ierNtw==",
+  "success": false,
+  "projectFilePath": "C:\\Users\\a00551001\\OneDrive - ONEVIRTUALOFFICE\\Desktop\\Affärslager\\Datalager\\Datalager.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://nexus-repo.scs.domain/repository/nuget/'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source '\\\\toossetcbs01\\data\\Releases\\NuGet' doesn't exist.",
+      "libraryId": "Microsoft.EntityFrameworkCore"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source '\\\\toossetcbs01\\data\\Releases\\NuGet' doesn't exist.",
+      "libraryId": "System.Data.SqlClient"
+    }
+  ]
+}

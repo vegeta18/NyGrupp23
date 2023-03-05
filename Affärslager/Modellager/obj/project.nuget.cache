@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "DaDC38t/z+LVEXQ5ExFdux4h+QCYThG2kTfc2ak/ixbxF32wRIGtpMUlDvyaH5MauViR31XfcvaHBOvbAYKC2w==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\a00551001\\OneDrive - ONEVIRTUALOFFICE\\Desktop\\Affärslager\\Modellager\\Modellager.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://nexus-repo.scs.domain/repository/nuget/'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
+    }
+  ]
+}
