@@ -8,43 +8,75 @@ using Modellager;
 
 namespace Datalager
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class, new()
     {
-        public BibliotekContext Context;
-        public Repository(BibliotekContext context)
+        protected BibliotekContext Context { get; }
+        protected DbSet<TEntity> Table { get; }
+        protected Repository(BibliotekContext context)
         {
             Context = context;
+            Table = Context.Set<TEntity>();
         }
 
-        public void Add(TEntity entity)
+        //Skapa 
+        public virtual TEntity Add(TEntity entity) 
         {
-            Context.Set<TEntity>().Add(entity);
-        }
-        public void Remove(TEntity entity) 
-        {
-            Context.Set<TEntity>().Remove(entity);  
+            Table.Add(entity); return entity; 
         }
 
-        public TEntity Get(int id) 
-        {
-            return Context.Set<TEntity>().Find(id);    
+        public virtual IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities) 
+        { 
+            Table.AddRange(entities); return entities;  
         }
 
-        public IEnumerable<TEntity> GetAll() 
+        //Läser
+        public virtual TEntity Find(int id) => Table.Find(id);
+        public virtual TEntity FirstOfDefault(Func<TEntity, bool> predicate) => Table.FirstOrDefault(predicate);
+        public virtual IEnumerable<TEntity> Find(Func<TEntity, bool> predicate) => Table.Where(predicate);
+        public virtual IEnumerable<TEntity> GetAll() => Table;
+
+        public virtual IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null!,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderby = null!, 
+        params Expression<Func<TEntity, object>>[] includes)
         {
-            return Context.Set<TEntity>().ToList();
+            IQueryable<TEntity> query = Table;
+            foreach(var include in includes)
+            {
+                query = query.Include(include);
+            }
+            query = (filter != null) ? query.Where(filter) : query;
+            query = (orderby != null) ? orderby(query) : query;
+            return query.ToList();
         }
 
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) 
+        public virtual IEnumerable<TEntity> Query(Func<IQueryable<TEntity>, IQueryable<TEntity>> query) => query(Table);
+
+        //uppdatering 
+        public virtual void Update(TEntity entity) => Table.Update(entity); 
+        public virtual TEntity Update(TEntity oldEntity, TEntity newEntity)
         {
-            return Context.Set<TEntity>().Where(predicate);
+            Context.Entry(oldEntity).CurrentValues.SetValues(newEntity);
+            Table.Update(oldEntity);
+            return oldEntity;
         }
 
-        public void RemoveRange(IEnumerable<TEntity> entities) 
+        public virtual void UpdateRange(IEnumerable<TEntity> entities) => Table.UpdateRange(entities);
+
+        //Delete
+        public virtual void Remove(int id)
         {
-            Context.Set<TEntity>.RemoveRange(entities);
+            var entity = Table.Find(id);
+            if(entity != null)
+            {
+                Context.Entry(entity).State = EntityState.Deleted;
+            }
         }
-      
+        public virtual TEntity Remove(TEntity entity)
+        {
+            Table.Remove(entity); return entity;
+        }
+        public virtual void RemoveRange(IEnumerable<TEntity> entities) => Table.RemoveRange(entities);
+
 
     }
 }
