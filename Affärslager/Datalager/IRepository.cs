@@ -8,13 +8,30 @@ using Modellager;
 
 namespace Datalager
 {
-    interface IRepository<TEntity> where TEntity : class
+    interface IRepository<TEntity>
     {
-        void Add(TEntity entity);
-        void Remove(TEntity entity);
-        TEntity Get(int id);
+        //Skapar
+        TEntity Add(TEntity entity);
+        IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
+
+        //Läser
+        TEntity Find(int id);
+        TEntity FirstOrDefault(Func<TEntity, bool> predicate);
         IEnumerable<TEntity> GetAll();
-        IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+        IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null!,
+                           Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null!,
+                           params Expression<Func<TEntity, object>>[] includes);
+        IEnumerable<TEntity> Find(Func<TEntity, bool> predicate);
+        IEnumerable<TEntity> Query(Func<IQueryable<TEntity>, IQueryable<TEntity>> query);
+
+        //Uppdaterar
+        void Update(TEntity entity);
+        TEntity Update(TEntity oldEntity, TEntity newEntity);
+        void UpdateRange(IEnumerable<TEntity> entities);
+
+        //Tar bort
+        void Remove(int id);
+        TEntity Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);    
         
     }

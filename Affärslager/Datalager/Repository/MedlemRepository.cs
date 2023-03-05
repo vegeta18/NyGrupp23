@@ -14,10 +14,5 @@ namespace Datalager.Repository
         {
 
         }
-
-        public BibliotekContext appDbContext
-        {
-            get { return Context as BibliotekContext; }
-        }
     }
 }
