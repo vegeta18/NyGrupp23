@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,9 @@ namespace Modellager
 {
     public class Faktura
     {
-        public int FakturaID { get; set; } 
+        [Key]
+        public int FakturaID { get; set; }
+        [Required]
         public decimal Summa { get; set; }
         public DateTime StartDatum { get; set; }
         public DateTime SlutDatum { get; set; }

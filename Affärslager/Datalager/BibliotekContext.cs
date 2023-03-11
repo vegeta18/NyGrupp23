@@ -11,40 +11,33 @@ using Modellager;
 namespace Datalager
 {
     public class BibliotekContext : DbContext
-    { 
+    {
 
         //INTE KLAR SE KOMMENTAR
-        public DbSet<Böcker> Böckers { get; set; }
-        public DbSet<Bokning> Bokningar { get; set; }
-        public DbSet<Expidit> Expiditer { get; set; }
-        public DbSet<Faktura> Fakturor { get; set; }
-        public DbSet<Medlem> Medlemmar { get; set; }
+        public DbSet<Böcker> Böckers { get; set; } = null!;
+        public DbSet<Bokning> Bokningar { get; set; } = null!;
+        public DbSet<Expidit> Expiditer { get; set; } = null!;
+        public DbSet<Faktura> Fakturor { get; set; } = null!;
+        public DbSet<Medlem> Medlemmar { get; set; } = null!;
 
         public BibliotekContext() { }
         
-        public Seed seed = new Seed();
-        public void Reset()
+        public BibliotekContext(DbContextOptions<BibliotekContext> options) : base(options) { }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            using (SqlConnection con = new SqlConnection(Database.Connection.ConnectionString))
-            using (SqlCommand scmd = new SqlCommand("DECLARE @SQL VARCHAR(MAX)='' SELECT @SQL = @SQL + 'ALTER TABLE ' + .....", con) ) // Här måste den kopplas till databasen
+            if(!optionsBuilder.IsConfigured)
             {
-                con.Open();
-                for(int i = 0; i < 5; i++)
-                {
-                    try
-                    {
-                        scmd.ExecuteNonQuery();  
-                    }
-                    catch(System.Exception)
-                    {
-
-                    }
-
-                }
-                con.Close();    
+                    string connectionString = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", true, true)
+                    .Build()
+                    .GetConnectionString("Pizzaria");
+                    optionsBuilder.UseSqlServer(connectionString);
+                
             }
-            Database.Initialize(true);
         }
+  
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
